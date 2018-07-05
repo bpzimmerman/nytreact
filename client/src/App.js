@@ -3,38 +3,14 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 import Articles from "./pages/Articles"
 import Nav from "./components/Nav";
-import Sidebar from "./components/Sidebar";
-import { Input, FormBtn } from "./components/Form";
 
 const App = () => (
   <Router>
     <div>
       <Nav />
-      <div className="wrapper">
-        <Sidebar>
-          <form>
-            <Input
-              type="text"
-              placeholder="Article Topic"
-              id="topic"
-            />
-            <Input
-              placeholder="Start Date (required)"
-              id="startDate"
-            />
-            <Input
-              placeholder="End Date (required)"
-              id="endDate"
-            />
-            <FormBtn>Submit</FormBtn>
-          </form>
-        </Sidebar>
-        <div id="content">
-          <Switch>
-            <Route exact path="/" component={Articles} />
-          </Switch>
-        </div>
-      </div>
+      <Switch>
+        <Route exact path="/" component={Articles} />
+      </Switch>
     </div>
   </Router>
 );
