@@ -1,37 +1,35 @@
-const db = require("../models");
+require("dotenv").config();
+const axios = require("axios");
+const keys = require("../keys.js");
 
-// Defining methods for the parks controller
+// activate api key
+const nytKey = keys.nyt.id;
+
+// Defining methods for the articlesController
 module.exports = {
-  findAll: (req, res) => {
-    db.Article
-      .find(req.query)
-      .sort({ date: -1 })
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
-  findById: (req, res) => {
-    db.Article
-      .findById(req.params.id)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
-  create: (req, res) => {
-    db.Article
-      .create(req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
-  update: (req, res) => {
-    db.Article
-      .findOneAndUpdate({ _id: req.params.id }, req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
-  remove: (req, res) => {
-    db.Article
-      .findById({ _id: req.params.id })
-      .then(dbModel => dbModel.remove())
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+  findNew: (req, res) => {
+    let topic = req.query.topic;
+    let startDate = req.query.startDate;
+    let endDate = req.query.endDate;
+
+    let nytURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+    let params = {
+      "api-key": nytKey,
+      "begin_date": startDate,
+      "end_date": endDate
+    };
+    if (topic) {
+      params["q"] = topic;
+    };
+
+    axios.get(nytURL, {
+      qs: params
+    }).then((response) => {
+      console.log(response);
+      res.json(response);
+    }).catch((error) => {
+      console.log(error);
+      res.json(error);
+    })
   }
 };

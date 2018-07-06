@@ -5,6 +5,7 @@ import "./Articles.css";
 import moment from "moment";
 import Sidebar from "../../components/Sidebar";
 import { Input, FormBtn } from "../../components/Form";
+import API from "../../utils/API";
 
 class Articles extends Component {
   state = {
@@ -35,9 +36,19 @@ class Articles extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.startDate && this.state.endDate) {
-      console.log("submitted!");
-      console.log(this.state.startDate);
-      console.log(this.state.endDate);
+      let start = moment(this.state.startDate).format("YYYYMMDD");
+      let end = moment(this.state.endDate).format("YYYYMMDD");
+      console.log(start);
+      console.log(end);
+      API.getArticles({
+        topic: this.state.topic,
+        startDate: this.state.startDate,
+        endDate: this.state.endDate
+      }).then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      });
     };
   };
 
