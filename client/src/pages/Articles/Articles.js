@@ -14,16 +14,24 @@ class Articles extends Component {
     endDate: undefined
   };
 
-  fromDateChange = date => {
-    this.setState({
-      startDate: date
-    });
+  dateChange = (date, event) => {
+    (!event.nativeEvent.path[7][2].name)?
+      this.setState({
+        [event.nativeEvent.path[7][1].name]: date
+      }):
+      this.setState({
+        [event.nativeEvent.path[7][2].name]: date
+      });
+    console.log(event.nativeEvent.path[7][1].name);
+    console.log(event.nativeEvent.path[7][2].name);
   };
 
-  toDateChange = date => {
-    this.setState({
-      endDate: date
-    });
+  maxStart = () => {
+    if (this.state.endDate && this.state.endDate < moment()) {
+      return this.state.endDate;
+    } else {
+      return moment();
+    }
   };
 
   handleInputChange = event => {
@@ -38,14 +46,14 @@ class Articles extends Component {
     if (this.state.startDate && this.state.endDate) {
       let start = moment(this.state.startDate).format("YYYYMMDD");
       let end = moment(this.state.endDate).format("YYYYMMDD");
-      console.log(start);
-      console.log(end);
+      console.log(`start: ${start}`);
+      console.log(`end: ${end}`);
       API.getArticles({
         topic: this.state.topic,
-        startDate: this.state.startDate,
-        endDate: this.state.endDate
+        startDate: start,
+        endDate: end
       }).then(res => {
-        console.log(res);
+        console.log(res.data.response.docs);
       }).catch(err => {
         console.log(err);
       });
@@ -69,7 +77,7 @@ class Articles extends Component {
               name="startDate"
               placeholderText="Start Date (required)"
               minDate={moment("1851-09-18")}
-              maxDate={moment()}
+              maxDate={this.maxStart()}
               showMonthDropdown
               showYearDropdown
               dropdownMode="select"
@@ -77,7 +85,7 @@ class Articles extends Component {
               selected={this.state.startDate}
               startDate={this.state.startDate}
               endDate={this.state.endDate}
-              onChange={this.fromDateChange}
+              onChange={this.dateChange}
             />
             <DatePicker
               className="form-group datePicker"
@@ -92,7 +100,7 @@ class Articles extends Component {
               selected={this.state.endDate}
               startDate={this.state.startDate}
               endDate={this.state.endDate}
-              onChange={this.toDateChange}
+              onChange={this.dateChange}
             />
             <FormBtn
               disabled={!(this.state.startDate && this.state.endDate)}

@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const app = express();
 
 // set application port
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3001;
 
 // require routes
 const routes = require("./routes");
@@ -27,7 +27,7 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/nytreact";
 
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
-mongoose.Promise = Promise;
+// mongoose.Promise = Promise;
 // mongoose.connect(MONGODB_URI);
 
 // Start the API server

@@ -13,23 +13,22 @@ module.exports = {
     let endDate = req.query.endDate;
 
     let nytURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-    let params = {
+    let search = {
       "api-key": nytKey,
       "begin_date": startDate,
       "end_date": endDate
     };
     if (topic) {
-      params["q"] = topic;
+      search["q"] = topic;
     };
 
     axios.get(nytURL, {
-      qs: params
+      params: search
     }).then((response) => {
-      console.log(response);
-      res.json(response);
+      res.json(response.data);
     }).catch((error) => {
-      console.log(error);
       res.json(error);
-    })
+    });
+
   }
 };

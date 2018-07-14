@@ -1,7 +1,9 @@
 import axios from "axios";
 
 export default {
-  getArticles: () => {
-    return axios.get("/api/articles");
+  getArticles: (queryData) => {
+    return axios.get("/api/articles", {
+      params: queryData
+    });
   }
 };
