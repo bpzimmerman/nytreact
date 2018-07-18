@@ -1,6 +1,21 @@
-.datePicker {
-  padding: 0.375rem 0.75rem;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  width: 100%;
+a:link {
+  color: #345578;
+}
+
+a:hover {
+  color: #082340;
+}
+
+a:visited {
+  color: #839AB3;
+}
+
+button.btn.btn-primary {
+  margin-bottom: 10px;
+}
+
+.card-body img {
+  max-width: 15rem;
+  margin-right: 0.5rem;
+  float: left;
 }
