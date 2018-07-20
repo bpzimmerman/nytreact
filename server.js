@@ -23,12 +23,12 @@ app.use(express.static("client/build"));
 app.use(routes);
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/nytreact";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/nytreact";
 
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
-// mongoose.Promise = Promise;
-// mongoose.connect(MONGODB_URI);
+mongoose.Promise = Promise;
+mongoose.connect(MONGODB_URI);
 
 // Start the API server
 app.listen(PORT, function() {

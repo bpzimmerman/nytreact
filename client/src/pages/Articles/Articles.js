@@ -23,7 +23,7 @@ const Articles = ({ articles }) => (
                     {article.saveFunc?
                       (
                         <div>
-                          <FormBtn onClick={article.saveFunc}>
+                          <FormBtn onClick={() => article.saveFunc(article)}>
                             Save Article
                           </FormBtn>
                         </div>

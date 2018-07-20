@@ -6,20 +6,32 @@ const Schema = mongoose.Schema;
 
 // create new schema for articles
 const ArticleSchema = new Schema({
-  title: {
+  _id: {
     type: String,
     required: true
   },
-  link: {
+  headline: {
     type: String,
     required: true
   },
-  date: {
+  web_url: {
+    type: String,
+    required: true
+  },
+  snippet: {
+    type: String,
+    required: true
+  },
+  pub_date: {
     type: Date,
     required: true
   },
-  picture: {
+  image: {
     type: String
+  },
+  news_desk: {
+    type: String,
+    required: true
   }
 });
 

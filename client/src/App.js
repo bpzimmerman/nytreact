@@ -8,6 +8,7 @@ import Articles from "./pages/Articles"
 import Nav from "./components/Nav";
 import './App.css';
 import API from "./utils/API";
+import DB from "./utils/DB";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 class App extends Component {
@@ -43,16 +44,23 @@ class App extends Component {
     });
   };
 
-  saveArticle = () => {
-    console.log("save article")
+  saveArticle = article => {
+    console.log("save article");
+    DB.saveArticle(article)
+      .then(res => {
+        console.log("article saved");
+      })
+      .catch(err => {
+        console.log(err);
+      })
   };
 
   deleteArticle = () => {
-    console.log("delete article")
+    console.log("delete article");
   };
 
   commentArticle = () => {
-    console.log("add comments to article")
+    console.log("add comments to article");
   };
 
   handleFormSubmit = event => {
@@ -76,6 +84,7 @@ class App extends Component {
             headline: item.headline.main,
             web_url: item.web_url,
             snippet: item.snippet,
+            pub_date: item.pub_date,
             image: img,
             news_desk: item.news_desk,
             saveFunc: this.saveArticle
