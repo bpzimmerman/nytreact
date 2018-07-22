@@ -23,9 +23,17 @@ const Articles = ({ articles }) => (
                     {article.saveFunc?
                       (
                         <div>
-                          <FormBtn onClick={() => article.saveFunc(article)}>
-                            Save Article
-                          </FormBtn>
+                          {!article.saved?
+                            (
+                              <FormBtn onClick={() => article.saveFunc(article)}>
+                                Save Article
+                              </FormBtn>
+                            ) : (
+                              <FormBtn disabled>
+                                Article Saved!
+                              </FormBtn>
+                            )
+                          }
                         </div>
                       ) : (
                         <div>

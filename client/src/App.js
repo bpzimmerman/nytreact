@@ -48,7 +48,20 @@ class App extends Component {
     console.log("save article");
     DB.saveArticle(article)
       .then(res => {
-        console.log("article saved");
+        console.log(`${res.data._id} article saved`);
+        let allArticles = this.state.articles;
+        allArticles.forEach((item, key) => {
+          if(item._id === res.data._id) {
+            allArticles[key].saved = true;
+          };
+        });
+        this.setState({
+          articles: allArticles,
+          topic: "",
+          startDate: undefined,
+          endDate: undefined
+        });
+        console.log(this.state.articles);
       })
       .catch(err => {
         console.log(err);
@@ -68,43 +81,76 @@ class App extends Component {
     if (this.state.startDate && this.state.endDate) {
       let start = moment(this.state.startDate).format("YYYYMMDD");
       let end = moment(this.state.endDate).format("YYYYMMDD");
-      API.getArticles({
-        topic: this.state.topic,
-        startDate: start,
-        endDate: end
-      }).then(res => {
-        let news = [];
-        console.log(res.data.response.docs);
-        res.data.response.docs.forEach(item => {
-          let img = "";
-          (item.multimedia[0])?
-            img=`https://static01.nyt.com/${item.multimedia[0].url}`:img="";
-          news.push({
-            _id: item._id,
-            headline: item.headline.main,
-            web_url: item.web_url,
-            snippet: item.snippet,
-            pub_date: item.pub_date,
-            image: img,
-            news_desk: item.news_desk,
-            saveFunc: this.saveArticle
+      DB.getSaves()
+        .then(res => {
+          let savedArticles = [];
+          res.data.forEach(item => {
+            savedArticles.push(item._id);
           });
+          API.getArticles({
+            topic: this.state.topic,
+            startDate: start,
+            endDate: end
+          }).then(res => {
+            let news = [];
+            console.log(res.data.response.docs);
+            res.data.response.docs.forEach(item => {
+              let img = "";
+              (item.multimedia[0])?
+                img=`https://static01.nyt.com/${item.multimedia[0].url}`:img="";
+              let status = false;
+              (savedArticles.indexOf(item._id) === -1)?(status = false):(status = true);
+              news.push({
+                _id: item._id,
+                headline: item.headline.main,
+                web_url: item.web_url,
+                snippet: item.snippet,
+                pub_date: item.pub_date,
+                image: img,
+                news_desk: item.news_desk,
+                saved: status,
+                saveFunc: this.saveArticle
+              });
+            });
+            console.log(news);
+            this.setState({
+              articles: news,
+              topic: "",
+              startDate: undefined,
+              endDate: undefined
+            });
+          }).catch(err => {
+            console.log(err);
+          });
+        })
+        .catch(err => {
+          console.log(err);
         });
-        console.log(news);
+    };
+  };
+
+  getSaved = (event) => {
+    event.preventDefault();
+    console.log("get saved articles");
+    DB.getSaves()
+      .then(res => {
+        console.log(res.data);
+        let saves = res.data;
+        saves.forEach((item, key) => {
+          saves[key].delFunc = this.deleteArticle;
+          saves[key].commentFunc = this.commentArticle;
+        });
         this.setState({
-          articles: news,
+          articles: saves,
           topic: "",
           startDate: undefined,
           endDate: undefined
         });
-      }).catch(err => {
+        console.log(saves);
+      })
+      .catch(err => {
         console.log(err);
       });
-    };
-  };
-
-  getSaved = () => {
-    console.log("get saved articles")
   };
 
   render() {
