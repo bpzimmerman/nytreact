@@ -72,8 +72,8 @@ class App extends Component {
     console.log("delete article");
   };
 
-  commentArticle = () => {
-    console.log("add comments to article");
+  saveComment = () => {
+    console.log("save comment");
   };
 
   handleFormSubmit = event => {
@@ -138,8 +138,8 @@ class App extends Component {
         let saves = res.data;
         saves.forEach((item, key) => {
           saves[key].delFunc = this.deleteArticle;
-          saves[key].commentFunc = this.commentArticle;
         });
+        saves.saveComment = this.saveComment
         this.setState({
           articles: saves,
           topic: "",

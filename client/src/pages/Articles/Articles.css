@@ -10,12 +10,42 @@ a:visited {
   color: #839AB3;
 }
 
-button.btn.btn-primary {
+button.btn {
   margin-bottom: 10px;
+}
+
+#modal-open {
+  margin-left: 8px;
+}
+
+.modal-footer button.btn {
+  margin-bottom: 0;
+}
+
+.card-header h4 {
+  margin: 0;
+}
+
+.card-header button.btn {
+  margin-top: 4px;
+  margin-bottom: 0;
 }
 
 .card-body img {
   max-width: 15rem;
   margin-right: 0.5rem;
   float: left;
+}
+
+@media (min-width: 992px) {
+
+  .card-header button.btn {
+    margin-top: 0;
+    margin-left: 8px;
+  }
+
+  #modal-open {
+    margin-top: 10px;
+  }
+
 }

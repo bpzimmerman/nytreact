@@ -3,6 +3,7 @@ import "./Articles.css";
 import Card from "../../components/Card";
 import { Col, Row } from "../../components/Grid";
 import { FormBtn } from "../../components/Form";
+import Modal from "../../components/Modal";
 
 const Articles = ({ articles }) => (
   <div id="content">
@@ -14,12 +15,12 @@ const Articles = ({ articles }) => (
             <Card section="card-header">
               <h4>
                 <Row>
-                  <Col size="md-9">
+                  <Col size="lg-9">
                     <a target="_blank" rel="noopener noreferrer" href={article.web_url}>
                       {article.headline}
                     </a>
                   </Col>
-                  <Col size="md-3">
+                  <Col size="lg-3">
                     {article.saveFunc?
                       (
                         <div>
@@ -40,7 +41,7 @@ const Articles = ({ articles }) => (
                           <FormBtn onClick={article.delFunc}>
                             Delete Article
                           </FormBtn>
-                          <FormBtn onClick={article.commentFunc}>
+                          <FormBtn data-toggle="modal" data-target="#notes-modal" id="modal-open">
                             Comments
                           </FormBtn>
                         </div>
@@ -51,7 +52,12 @@ const Articles = ({ articles }) => (
               </h4>
             </Card>
             <Card section="card-body">
-              <img src={article.image} alt={article.news_desk} />
+              {article.image?(
+                  <img src={article.image} alt={article.news_desk} />
+                ) : (
+                  <div></div>
+                )
+              }
               <p className="summary">{article.snippet}</p>
             </Card>
           </Card>
@@ -60,6 +66,7 @@ const Articles = ({ articles }) => (
     ) : (
       <h3>Use Controls to Search for New Articles or Display Saved Articles</h3>
     )}
+    <Modal saveCommentFunc={articles.saveComment} />
   </div>
 )
 
