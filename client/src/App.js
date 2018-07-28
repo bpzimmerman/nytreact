@@ -73,7 +73,8 @@ class App extends Component {
   };
 
   saveComment = () => {
-    console.log("save comment");
+    let articleID = document.getElementById("comment-title").getAttribute("data-article");
+    console.log(`save comment for ${articleID}`);
   };
 
   handleFormSubmit = event => {
@@ -129,7 +130,7 @@ class App extends Component {
     };
   };
 
-  getSaved = (event) => {
+  getSavedArticles = (event) => {
     event.preventDefault();
     console.log("get saved articles");
     DB.getSaves()
@@ -138,6 +139,7 @@ class App extends Component {
         let saves = res.data;
         saves.forEach((item, key) => {
           saves[key].delFunc = this.deleteArticle;
+          saves[key].getComments = this.getSavedComments;
         });
         saves.saveComment = this.saveComment
         this.setState({
@@ -151,6 +153,13 @@ class App extends Component {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  getSavedComments = (articleID) => {
+    let title = document.getElementById("comment-title");
+    title.setAttribute("data-article", articleID);
+    title.innerHTML = `Article Comments: ${articleID}`
+    console.log("get saved comments");
   };
 
   render() {
@@ -213,7 +222,7 @@ class App extends Component {
               </div>
               <form>
                 <FormBtn
-                  onClick={this.getSaved}
+                  onClick={this.getSavedArticles}
                 >
                   Get Saved Articles
                 </FormBtn>

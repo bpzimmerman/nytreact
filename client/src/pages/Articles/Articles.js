@@ -41,7 +41,7 @@ const Articles = ({ articles }) => (
                           <FormBtn onClick={article.delFunc}>
                             Delete Article
                           </FormBtn>
-                          <FormBtn data-toggle="modal" data-target="#notes-modal" id="modal-open">
+                          <FormBtn data-toggle="modal" data-target="#notes-modal" id="modal-open" onClick={() => article.getComments(article._id)}>
                             Comments
                           </FormBtn>
                         </div>

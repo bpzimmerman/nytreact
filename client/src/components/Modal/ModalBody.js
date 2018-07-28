@@ -1,7 +1,7 @@
 import React from "react";
 
-export const ModalBody = () => (
+export const ModalBody = ({ children }) => (
   <div className="modal-body">
-    Test
+    {children}
   </div>
 );
