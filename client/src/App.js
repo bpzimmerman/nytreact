@@ -16,7 +16,8 @@ class App extends Component {
     articles: [],
     topic: "",
     startDate: undefined,
-    endDate: undefined
+    endDate: undefined,
+    comments: []
   };
 
   dateChange = (date, event) => {
@@ -72,9 +73,23 @@ class App extends Component {
     console.log("delete article");
   };
 
-  saveComment = () => {
+  saveComment = event => {
+    event.preventDefault();
     let articleID = document.getElementById("comment-title").getAttribute("data-article");
     console.log(`save comment for ${articleID}`);
+    let comment = document.getElementById("comment").value.trim();
+    console.log(comment);
+    DB.saveComment({
+      body: comment,
+      article: articleID
+    })
+      .then(res => {
+        console.log("Comment Saved!");
+        document.getElementById("comment").value = "";
+      })
+      .catch(err => {
+        console.log(err);
+      })
   };
 
   handleFormSubmit = event => {
@@ -160,6 +175,20 @@ class App extends Component {
     title.setAttribute("data-article", articleID);
     title.innerHTML = `Article Comments: ${articleID}`
     console.log("get saved comments");
+    DB.getComments({
+      articleId: articleID
+    }).then(res => {
+      res.data.forEach(item => {
+        let date = moment(item.created).format("DD-MMM-YYYY");
+        item.created = date;
+      })
+      this.setState({
+        comments: res.data
+      });
+      console.log(this.state.comments);
+    }).catch(err => {
+      console.log(err);
+    });
   };
 
   render() {
@@ -234,6 +263,7 @@ class App extends Component {
               >
                 <Articles
                   articles={this.state.articles}
+                  comments={this.state.comments}
                 />
               </Route>
             </Switch>

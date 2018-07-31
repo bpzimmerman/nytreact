@@ -5,7 +5,7 @@ import { Col, Row } from "../../components/Grid";
 import { FormBtn } from "../../components/Form";
 import Modal from "../../components/Modal";
 
-const Articles = ({ articles }) => (
+const Articles = ({ articles, comments }) => (
   <div id="content">
     {articles.length ? 
     (
@@ -66,7 +66,10 @@ const Articles = ({ articles }) => (
     ) : (
       <h3>Use Controls to Search for New Articles or Display Saved Articles</h3>
     )}
-    <Modal saveCommentFunc={articles.saveComment} />
+    <Modal
+      saveCommentFunc={articles.saveComment}
+      comments={comments}
+    />
   </div>
 )
 

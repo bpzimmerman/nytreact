@@ -6,7 +6,8 @@ const dbRoutes = require("./db");
 // API Routes
 router.use("/api", apiRoutes);
 
-router.use("/db", dbRoutes)
+// Database Routes
+router.use("/db", dbRoutes);
 
 router.use(function(req, res) {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));

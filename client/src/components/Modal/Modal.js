@@ -1,11 +1,12 @@
 import React from "react";
+import "./Modal.css";
 import { ModalHead } from "./ModalHead";
 import { ModalBody } from "./ModalBody";
 import { ModalFoot } from "./ModalFoot";
 import { TextArea } from "../Form/TextArea";
 import { List } from "../List/List";
 
-const Modal = ({ saveCommentFunc }) => (
+const Modal = ({ saveCommentFunc, comments }) => (
   <div className="modal fade" id="notes-modal">
     <div className="modal-dialog" role="document">
       <div className="modal-content">
@@ -13,8 +14,8 @@ const Modal = ({ saveCommentFunc }) => (
           Title
         </ModalHead>
         <ModalBody>
-          <List />
-          <TextArea placeholder="New Comment" rows="5" cols="60" />
+          <List items={comments}/>
+          <TextArea placeholder="New Comment" rows="5" cols="60" id="comment" />
         </ModalBody>
         <ModalFoot func={saveCommentFunc} />
       </div>

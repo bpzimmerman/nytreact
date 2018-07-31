@@ -11,7 +11,20 @@ module.exports = {
   findAll: (req, res) => {
     db.Article
       .find(req.query)
-      .sort( { pub_date: -1 })
+      .sort({ pub_date: -1 })
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+  saveComment: (req, res) => {
+    db.Comment
+      .create(req.body)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+  findComments: (req, res) => {
+    db.Comment
+      .find({article: req.query.articleId})
+      .sort({ created: -1 })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   }

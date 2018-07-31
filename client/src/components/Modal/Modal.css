@@ -1,0 +1,8 @@
+.list-group-item {
+  padding: 0.375rem 0.75rem;
+}
+
+li button.btn {
+  margin-left: 0.375rem;
+  margin-bottom: 0;
+}
