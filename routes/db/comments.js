@@ -5,5 +5,6 @@ const savesController = require("../../controllers/savesController");
 router.route("/")
   .post(savesController.saveComment)
   .get(savesController.findComments)
+  .delete(savesController.deleteComment)
 
 module.exports = router;

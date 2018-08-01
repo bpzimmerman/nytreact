@@ -79,17 +79,29 @@ class App extends Component {
     console.log(`save comment for ${articleID}`);
     let comment = document.getElementById("comment").value.trim();
     console.log(comment);
-    DB.saveComment({
-      body: comment,
-      article: articleID
-    })
-      .then(res => {
+    if(comment) {
+      DB.saveComment({
+        body: comment,
+        article: articleID
+      }).then(res => {
         console.log("Comment Saved!");
         document.getElementById("comment").value = "";
-      })
-      .catch(err => {
+      }).catch(err => {
         console.log(err);
       })
+    };
+  };
+
+  deleteComment = (comment) => {
+    console.log(`delete comment: ${comment}`);
+    DB.deleteComment({
+      id: comment
+    }).then(res => {
+      let articleID = document.getElementById("comment-title").getAttribute("data-article");
+      this.getSavedComments(articleID);
+    }).catch(err => {
+      console.log(err);
+    })
   };
 
   handleFormSubmit = event => {
@@ -181,6 +193,7 @@ class App extends Component {
       res.data.forEach(item => {
         let date = moment(item.created).format("DD-MMM-YYYY");
         item.created = date;
+        item.delCommentFunc = this.deleteComment;
       })
       this.setState({
         comments: res.data

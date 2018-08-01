@@ -14,5 +14,10 @@ export default {
     return axios.get("/db/comments", {
       params: queryData
     });
+  },
+  deleteComment: (queryData) => {
+    return axios.delete("/db/comments", {
+      params: queryData
+    });
   }
 };

@@ -27,5 +27,11 @@ module.exports = {
       .sort({ created: -1 })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
+  },
+  deleteComment: (req, res) => {
+    db.Comment
+      .remove({_id: req.query.id})
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
   }
 };
