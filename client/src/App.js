@@ -20,6 +20,7 @@ class App extends Component {
     comments: []
   };
 
+  // set state for the start and end date when the date selectors are used
   dateChange = (date, event) => {
     (!event.nativeEvent.path[7][2].name)?
       this.setState({
@@ -30,6 +31,7 @@ class App extends Component {
       });
   };
 
+  // defines the maximum start date if an end date is selected first (prevents the start date from being later than the end date)
   maxStart = () => {
     if (this.state.endDate && this.state.endDate < moment()) {
       return this.state.endDate;
@@ -38,6 +40,7 @@ class App extends Component {
     }
   };
 
+  // sets the state for the "topic" input box
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -45,46 +48,55 @@ class App extends Component {
     });
   };
 
+  // saves an article to the database
   saveArticle = article => {
-    console.log("save article");
-    DB.saveArticle(article)
-      .then(res => {
-        console.log(`${res.data._id} article saved`);
-        let allArticles = this.state.articles;
-        allArticles.forEach((item, key) => {
-          if(item._id === res.data._id) {
-            allArticles[key].saved = true;
-          };
-        });
-        this.setState({
-          articles: allArticles,
-          topic: "",
-          startDate: undefined,
-          endDate: undefined
-        });
-        console.log(this.state.articles);
-      })
-      .catch(err => {
+    DB.saveArticle(
+      article
+    ).then(res => {
+      let allArticles = this.state.articles;
+      allArticles.forEach((item, key) => {
+        if(item._id === res.data._id) {
+          allArticles[key].saved = true;
+        };
+      });
+      this.setState({
+        articles: allArticles,
+        topic: "",
+        startDate: undefined,
+        endDate: undefined
+      });
+    }).catch(err => {
+      console.log(err);
+    })
+  };
+
+  // deletes a previously saved article
+  deleteArticle = (article) => {
+    DB.deleteAllComments({
+      articleId: article
+    }).then(res => {
+      DB.deleteArticle({
+        articleId: article
+      }).then(res => {
+        this.getSavedArticles();
+      }).catch(err => {
         console.log(err);
       })
+    }).catch(err => {
+      console.log(err);
+    })
   };
 
-  deleteArticle = () => {
-    console.log("delete article");
-  };
-
+  // saves a comment on an article to the database
   saveComment = event => {
     event.preventDefault();
     let articleID = document.getElementById("comment-title").getAttribute("data-article");
-    console.log(`save comment for ${articleID}`);
     let comment = document.getElementById("comment").value.trim();
-    console.log(comment);
     if(comment) {
       DB.saveComment({
         body: comment,
         article: articleID
       }).then(res => {
-        console.log("Comment Saved!");
         document.getElementById("comment").value = "";
       }).catch(err => {
         console.log(err);
@@ -92,11 +104,11 @@ class App extends Component {
     };
   };
 
+  // deletes a previously saved comment
   deleteComment = (comment) => {
-    console.log(`delete comment: ${comment}`);
-    DB.deleteComment({
-      id: comment
-    }).then(res => {
+    DB.deleteComment(
+      comment
+    ).then(res => {
       let articleID = document.getElementById("comment-title").getAttribute("data-article");
       this.getSavedComments(articleID);
     }).catch(err => {
@@ -104,6 +116,7 @@ class App extends Component {
     })
   };
 
+  // retrieves articles from the NY Times API based on the form inputs (topic, start date, end date)
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.startDate && this.state.endDate) {
@@ -121,7 +134,6 @@ class App extends Component {
             endDate: end
           }).then(res => {
             let news = [];
-            console.log(res.data.response.docs);
             res.data.response.docs.forEach(item => {
               let img = "";
               (item.multimedia[0])?
@@ -140,7 +152,6 @@ class App extends Component {
                 saveFunc: this.saveArticle
               });
             });
-            console.log(news);
             this.setState({
               articles: news,
               topic: "",
@@ -157,12 +168,13 @@ class App extends Component {
     };
   };
 
-  getSavedArticles = (event) => {
-    event.preventDefault();
-    console.log("get saved articles");
+  // gets all the saved articles
+  getSavedArticles = event => {
+    if (event) {
+      event.preventDefault();
+    };
     DB.getSaves()
       .then(res => {
-        console.log(res.data);
         let saves = res.data;
         saves.forEach((item, key) => {
           saves[key].delFunc = this.deleteArticle;
@@ -175,18 +187,17 @@ class App extends Component {
           startDate: undefined,
           endDate: undefined
         });
-        console.log(saves);
       })
       .catch(err => {
         console.log(err);
       });
   };
 
+  // gets the saved comments for a specified article
   getSavedComments = (articleID) => {
     let title = document.getElementById("comment-title");
     title.setAttribute("data-article", articleID);
-    title.innerHTML = `Article Comments: ${articleID}`
-    console.log("get saved comments");
+    title.innerHTML = `Article Comments: ${articleID}`;
     DB.getComments({
       articleId: articleID
     }).then(res => {
@@ -198,7 +209,6 @@ class App extends Component {
       this.setState({
         comments: res.data
       });
-      console.log(this.state.comments);
     }).catch(err => {
       console.log(err);
     });

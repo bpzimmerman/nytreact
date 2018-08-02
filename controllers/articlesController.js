@@ -5,7 +5,7 @@ const keys = require("../keys.js");
 // activate api key
 const nytKey = keys.nyt.id;
 
-// Defining methods for the articlesController
+// Defining methods for the articlesController (getting new articles from the NY Times API)
 module.exports = {
   findNew: (req, res) => {
     let topic = req.query.topic;

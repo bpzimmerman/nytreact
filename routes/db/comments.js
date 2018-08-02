@@ -5,6 +5,10 @@ const savesController = require("../../controllers/savesController");
 router.route("/")
   .post(savesController.saveComment)
   .get(savesController.findComments)
-  .delete(savesController.deleteComment)
+  .delete(savesController.deleteAllComments);
+
+// Matches with "/db/comments/:id"
+router.route("/:id")
+  .delete(savesController.deleteComment);
 
 module.exports = router;

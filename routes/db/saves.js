@@ -5,5 +5,6 @@ const savesController = require("../../controllers/savesController");
 router.route("/")
   .post(savesController.saveArticle)
   .get(savesController.findAll)
+  .delete(savesController.deleteArticle);
 
 module.exports = router;
