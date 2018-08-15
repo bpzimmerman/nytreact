@@ -2,7 +2,7 @@ $(document).ready(() => {
 
   const sideClass = () => {
     let wid = $(window).width();
-    (wid > 768)?$('#sidebar').addClass('active'):$('#sidebar').removeClass('active');
+    (wid >= 751)?$('#sidebar').addClass('active'):$('#sidebar').removeClass('active');
   };
 
   $('#sidebarCollapse').on('click', () => {
