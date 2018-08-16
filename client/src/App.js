@@ -122,6 +122,9 @@ class App extends Component {
     if (this.state.startDate && this.state.endDate) {
       let start = moment(this.state.startDate).format("YYYYMMDD");
       let end = moment(this.state.endDate).format("YYYYMMDD");
+      if (end === start) {
+        end = moment(this.state.endDate).add(1, "days").format("YYYYMMDD")
+      };
       DB.getSaves()
         .then(res => {
           let savedArticles = [];
